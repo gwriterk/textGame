@@ -64,19 +64,33 @@ class CaseInsensitiveDict:
             return key_list
 
     def values(self):
-        myinstance = CaseInsensitiveDict()
         value_list = []
-        for key in self:
-            value_list.append(key)
-        return value_list
+        for i in self.dict:
+            t = self.dict[i]
+            value_list.append(t)
+            return value_list
 
     def items(self):
-        myinstance = CaseInsensitiveDict()
         items_list = []
-        for i in myinstance():
-            t = (i, myinstance[i])
+        for i in self.dict:
+            t = (i, self.dict[i])
             items_list.append(t)
         return items_list
+
+    def popitem(self):
+        myinstance = CaseInsensitiveDict()
+        for key in myinstance:
+            value = myinstance[key]
+            item = (key, value)
+            myinstance.popitem(item)
+            return item
+
+    def get(self, key, default=None):
+        if key in self.dict:
+            return self.dict[key]
+        else:
+            return default
+
 
 
 if __name__ == '__main__':

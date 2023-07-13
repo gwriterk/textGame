@@ -67,6 +67,16 @@ class TestCaseInsensitiveDict(TestCase):
         #     Return the value for key if key is in the dictionary, else
         #     default.  If default is not given, it defaults to None, so that
         #     this method never raises a KeyError.
+    def test_get(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        self.assertIn('Kaisa', myinstance)
+        self.assertNotIn('Jhin', myinstance)
+        value = myinstance.get('Kaisa')
+        nonvalue = myinstance.get('Jhin')
+        self.assertEqual(value, 5)
+        self.assertEqual(nonvalue, None)
+
 
         # items()
         #     Return a new view of the dictionary’s items ((key, value) pairs).
@@ -100,6 +110,13 @@ class TestCaseInsensitiveDict(TestCase):
         # popitem()
         #     Remove and return a (key, value) pair from the dictionary.  Pairs
         #     are returned in LIFO order.
+    def test_popitem(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        self.assertIn('Kaisa', myinstance)
+        item = myinstance.popitem()
+        self.assertIs(item, ('Kaisa', 5))
+        self.assertNotIn(item, myinstance)
 
         # setdefault(key[, default])
         #     If key is in the dictionary, return its value. If not, insert key
@@ -122,7 +139,10 @@ class TestCaseInsensitiveDict(TestCase):
     def test_values(self):
         myinstance = CaseInsensitiveDict()
         myinstance['Kaisa'] = 5
+        myinstance['Jhin'] = 4
         self.assertIn('Kaisa', myinstance)
+        self.assertIn('Jhin', myinstance)
         values = myinstance.values()
         print(f'values is {values}')
         self.assertIn(5, values)
+        self.assertEqual(2, len(values))
