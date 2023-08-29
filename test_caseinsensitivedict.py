@@ -15,7 +15,9 @@ class TestCaseInsensitiveDict(TestCase):
         myinstance = CaseInsensitiveDict()
         myinstance['Kaisa'] = 5
         myinstance['KAISA'] = 'daughter of the void'
+        myinstance[5] = 10
         self.assertEqual(myinstance['Kaisa'], 'daughter of the void')
+        self.assertEqual(myinstance[5], 10)
 
     def test_list(self):
         myinstance = CaseInsensitiveDict()
@@ -63,14 +65,19 @@ class TestCaseInsensitiveDict(TestCase):
         self.assertEqual(myinstance, mysecondinstance)
         self.assertFalse(myinstance is mysecondinstance)
 
-        # get(key[, default])
-        #     Return the value for key if key is in the dictionary, else
-        #     default.  If default is not given, it defaults to None, so that
-        #     this method never raises a KeyError.
+    def test_get(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        myinstance[2] = 4
+        self.assertIn('Kaisa', myinstance)
+        self.assertNotIn('Jhin', myinstance)
+        value = myinstance.get('Kaisa')
+        nonevalue = myinstance.get('Jhin')
+        lctestvalue = myinstance.get('kaisa')
+        self.assertEqual(value, 5)
+        self.assertEqual(nonevalue, None)
+        self.assertEqual(lctestvalue, 5)
 
-        # items()
-        #     Return a new view of the dictionary’s items ((key, value) pairs).
-        #     See the documentation of view objects.
 
     def test_items(self):
         myinstance = CaseInsensitiveDict()
@@ -92,19 +99,31 @@ class TestCaseInsensitiveDict(TestCase):
         keys = myinstance.keys()
         self.assertIn('Kaisa', keys)
 
-        # pop(key[, default])
-        #     If key is in the dictionary, remove it and return its value, else
-        #     return default. If default is not given and key is not in the
-        #     dictionary, a KeyError is raised.
 
-        # popitem()
-        #     Remove and return a (key, value) pair from the dictionary.  Pairs
-        #     are returned in LIFO order.
+    def test_popitem(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        myinstance['Jhin'] = 4
+        myinstance['Qiyana'] = 'Yun Tal'
+        item = myinstance.popitem()
+        self.assertEqual(item, ('Qiyana', 'Yun Tal'))
+        self.assertNotIn('Qiyana', myinstance)
+        item2 = myinstance.popitem()
+        self.assertEqual(item2, ('Jhin', 4))
+        self.assertNotIn('Jhin', myinstance)
+        item3 = myinstance.popitem()
+        self.assertEqual(item3, ('Kaisa', 5))
+        self.assertNotIn('Kaisa', myinstance)
+        self.assertEqual(myinstance, {})
 
-        # setdefault(key[, default])
-        #     If key is in the dictionary, return its value. If not, insert key
-        #     with a value of default and return default.  default defaults to
-        #     None.
+
+    def test_setdefault(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        item = myinstance.setdefault('Kaisa')
+        self.assertEqual(item, 5)
+        default_item = myinstance.setdefault('Jhin', 4)
+        self.assertEqual(default_item, 4)
 
         # update([other])
         #     Update the dictionary with the key/value pairs from other,
@@ -115,14 +134,14 @@ class TestCaseInsensitiveDict(TestCase):
         #     If keyword arguments are specified, the dictionary is then
         #     updated with those key/value pairs: d.update(red=1, blue=2).
 
-        # values()
-        #     Return a new view of the dictionary’s values. See the documentation
-        #     of view objects.
 
     def test_values(self):
         myinstance = CaseInsensitiveDict()
         myinstance['Kaisa'] = 5
+        myinstance['Jhin'] = 4
         self.assertIn('Kaisa', myinstance)
+        self.assertIn('Jhin', myinstance)
         values = myinstance.values()
         print(f'values is {values}')
         self.assertIn(5, values)
+        self.assertEqual(2, len(values))

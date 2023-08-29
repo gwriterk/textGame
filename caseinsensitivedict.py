@@ -3,9 +3,11 @@ class CaseInsensitiveDict:
         self.dict = {}
 
     def __getitem__(self, key):
-        print('I was called.')
         for i in self.dict:
-            if i.lower() == key.lower():
+            if isinstance(i, str) and isinstance(key, str):
+                if i.lower() == key.lower():
+                    return self.dict[i]
+            elif i == key:
                 return self.dict[i]
         raise KeyError('That is not correct.')
 
@@ -13,7 +15,11 @@ class CaseInsensitiveDict:
         # key = 'Snake' value = 5
         existing = None
         for i in self.dict:
-            if i.lower() == key.lower():
+            if isinstance(i, str) and isinstance(key, str):
+                if i.lower() == key.lower():
+                    existing = i
+                    break
+            elif i == key:
                 existing = i
                 break
         if existing:
@@ -64,19 +70,41 @@ class CaseInsensitiveDict:
             return key_list
 
     def values(self):
-        myinstance = CaseInsensitiveDict()
         value_list = []
-        for key in self:
-            value_list.append(key)
+        for i in self.dict:
+            t = self.dict[i]
+            value_list.append(t)
         return value_list
 
     def items(self):
-        myinstance = CaseInsensitiveDict()
         items_list = []
-        for i in myinstance():
-            t = (i, myinstance[i])
+        for i in self.dict:
+            t = (i, self.dict[i])
             items_list.append(t)
         return items_list
+
+    def popitem(self):
+        return self.dict.popitem()
+
+
+    def get(self, key, default=None):
+        for item in self.dict:
+            if isinstance(item, str) and isinstance(key, str):
+                if item.lower() == key.lower():
+                    return self.dict[item]
+            elif item == key:
+                return self.dict[item]
+        return default
+
+
+    def setdefault(self, key, default=None):
+        if key in self.dict:
+            value = self.dict[key]
+            return value
+        else:
+            self.dict[key] = default
+            return default
+
 
 
 if __name__ == '__main__':
