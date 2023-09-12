@@ -105,6 +105,20 @@ class CaseInsensitiveDict:
             self.dict[key] = default
             return default
 
+    def update(self, other=(), **kwargs): # kwargs is a dictionary
+        if isinstance(other, dict):
+            for key in other:
+                self.dict[key] = other[key]
+        # if other is a list of tuples or a tuple
+        else:
+            for key, value in other:
+                # other = (('red', 1),)
+                self.dict[key] = value
+        #else: # address kwargs here
+            #for key in other:
+                #self.dict[key] = other[key]
+        return None
+
 
 
 if __name__ == '__main__':
