@@ -134,6 +134,18 @@ class TestCaseInsensitiveDict(TestCase):
         #     If keyword arguments are specified, the dictionary is then
         #     updated with those key/value pairs: d.update(red=1, blue=2).
 
+    def test_update(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        mydict = {'Jhin': 4, 'Kaisa': 6}
+        myinstance.update(mydict)
+        self.assertEqual(myinstance, {'Jhin': 4, 'Kaisa': 6})
+        mypair = [('Qiyana', 'Yun Tal')]
+        myinstance.update(mypair)
+        self.assertEqual(myinstance, {'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6})
+        myinstance.update(red=1, blue=2)
+        self.assertEqual(myinstance, {'red': 1, 'blue': 2, 'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6})
+
 
     def test_values(self):
         myinstance = CaseInsensitiveDict()
