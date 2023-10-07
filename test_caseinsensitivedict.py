@@ -144,7 +144,9 @@ class TestCaseInsensitiveDict(TestCase):
         myinstance.update(mypair)
         self.assertEqual(myinstance, {'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6})
         myinstance.update(red=1, blue=2)
-        self.assertEqual(myinstance, {'red': 1, 'blue': 2, 'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6})
+        print('myinstance is', myinstance)
+        print({'red': 1, 'blue': 2, 'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6}, myinstance)
+        self.assertEqual({'red': 1, 'blue': 2, 'Qiyana': 'Yun Tal', 'Jhin': 4, 'Kaisa': 6}, myinstance)
 
 
     def test_values(self):
@@ -157,3 +159,19 @@ class TestCaseInsensitiveDict(TestCase):
         print(f'values is {values}')
         self.assertIn(5, values)
         self.assertEqual(2, len(values))
+
+    def test_eq(self):
+        myinstance = CaseInsensitiveDict()
+        myinstance['Kaisa'] = 5
+        myinstance['Jhin'] = 4
+        mysecondinstance = CaseInsensitiveDict()
+        mysecondinstance['Kaisa'] = 5
+        mysecondinstance['Jhin'] = 4
+        self.assertNotEqual(myinstance, {'Kaisa': 5, 'Jhin': 3})
+        self.assertNotEqual(myinstance, {7: 'Nilah'})
+        self.assertEqual(myinstance, {'Kaisa': 5, 'Jhin': 4})
+        self.assertEqual(myinstance, {'kaisa': 5, 'JHIN':  4})
+        self.assertNotEqual(myinstance, {})
+        self.assertEqual(CaseInsensitiveDict(),{})
+        self.assertNotEqual(myinstance, True)
+        self.assertEqual(myinstance, mysecondinstance)

@@ -44,15 +44,41 @@ class CaseInsensitiveDict:
             raise KeyError
 
     def __eq__(self, other):
-        for i in self:
-            self_value = self[i]
-            if i in other:
-                other_value = other[i]
+        if len(self) == 0:
+            if len(other) == 0:
+                return True
             else:
                 return False
-            if self_value != other_value:
-                return False
-        return True
+        if not (isinstance(other, dict) or isinstance(other, CaseInsensitiveDict)):
+            return False
+        if len(self) != len(other):
+            return False
+        for i in self:
+            i_found_in_j = False
+            for j in other:
+                if i == j:
+                    if self[i] == other[j]:
+                        i_found_in_j = True
+                        break
+                elif isinstance(i, str) and isinstance(j, str):
+                    if i.lower() == j.lower():
+                        if self[i] == other[j]:
+                            i_found_in_j = True
+                            break
+                else:
+                    i_found_in_j = False
+        return i_found_in_j
+
+        # must return a Bool, works to compare self with other dictionary objects
+        # *** valid to pass in other types to comparison op (won't raise exception); returns False
+        # must also account for case insensitivity in keys
+        # iterating is necessary, but simply checking if each key of one exists in the other is...
+        # ...not sufficient; one cannot have more keys than the other, values must also be the same
+        # as soon as your check returns False at any point, you can stop the method!
+        # if the two dict objects pass all the checks, the method should return True
+
+    def __repr__(self):
+        return repr(self.dict)
 
     def clear(self):
         self.dict = {}
@@ -123,21 +149,9 @@ class CaseInsensitiveDict:
 
 if __name__ == '__main__':
     myinstance = CaseInsensitiveDict()
-    myvariable = myinstance['jhin']
-    # myvariable = myinstance.__getitem__('jhin')
-    # myvariable = myinstance.__getitem__(myinstance, 'jhin')
-    print(f'myvariable is {myvariable}')
     myinstance['Kaisa'] = 5
-    print(f'Kaisa is', myinstance['Kaisa'])
-    myinstance['KAISA'] = 'daughter of the void'
-    print(f'Kaisa is now', myinstance['Kaisa'])
-    # 1. Get a value by key
-    # 2. Set a value by key
-    # 3. Delete a value by key
-    # j['Jhin'] = 4
-    # j = {'Key': (value1, value2), 'Jhin': 4}
-    # j['jhin'] = 5
-    # j = {'Key': (value1, value2), 'Jhin': 4, 'jhin': 5}
-    # j = {'Key': (value1, value2), 'jhin': 5}
-    # del j['jhin']
-    # j = {'Key': (value1, value2)}
+    myinstance['Jhin'] = 4
+    mysecondinstance = CaseInsensitiveDict()
+    mysecondinstance['Kaisa'] = 5
+    mysecondinstance['Jhin'] = 4
+    print(myinstance == mysecondinstance)
