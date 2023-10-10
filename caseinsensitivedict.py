@@ -136,13 +136,12 @@ class CaseInsensitiveDict:
             for key in other:
                 self.dict[key] = other[key]
         # if other is a list of tuples or a tuple
-        else:
+        elif isinstance(other, tuple) or isinstance(other,list):
             for key, value in other:
                 # other = (('red', 1),)
                 self.dict[key] = value
-        #else: # address kwargs here
-            #for key in other:
-                #self.dict[key] = other[key]
+        for key in kwargs:
+            self.dict[key] = kwargs[key]
         return None
 
 
