@@ -1,6 +1,15 @@
 class CaseInsensitiveDict:
-    def __init__(self):
+    def __init__(self, mapping={}, **kwargs):
         self.dict = {}
+        for key in kwargs:
+            self.dict[key] = kwargs[key]
+        if isinstance(mapping, dict) or isinstance(mapping, CaseInsensitiveDict):
+            for key in mapping:
+                self.dict[key] = mapping[key]
+        else:
+            for key, value in mapping:
+                self.dict[key] = value
+
 
     def __getitem__(self, key):
         for i in self.dict:
